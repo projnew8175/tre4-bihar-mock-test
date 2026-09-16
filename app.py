@@ -97,7 +97,7 @@ def seed_practice_sets():
     ]
     for number in range(1, 51):
         ps = PracticeSet(number=number, title=f"Practice Set {number}",
-                         description="40 प्रश्न • 40 मिनट • TRE-4 syllabus-oriented practice")
+                         description="40 प्रश्न • 30 मिनट • TRE-4 syllabus-oriented practice")
         db.session.add(ps)
         db.session.flush()
         subjects = mixes[(number - 1) % len(mixes)]
@@ -147,29 +147,6 @@ def start_practice(set_number):
     session["student_id"] = student.id
     session["practice_set_id"] = ps.id
     session["practice_set_number"] = ps.number
-    session["questions"] = [q.id for q in selected]
-    session["answers"] = {}
-    return redirect(url_for("test"))
-
-@app.route("/start", methods=["POST"])
-def start():
-    name, roll = request.form.get("name","").strip(), request.form.get("roll","").strip()
-    subjects = request.form.getlist("subjects")
-    if not name or not roll:
-        flash("Name और Roll/Mobile भरना जरूरी है।", "error")
-        return redirect(url_for("index"))
-    query = Question.query
-    if subjects and "All" not in subjects:
-        query = query.filter(Question.subject.in_(subjects))
-    questions = query.all()
-    if len(questions) < 40:
-        flash(f"Selected subjects में कम से कम 40 questions चाहिए। अभी {len(questions)} हैं।", "error")
-        return redirect(url_for("index"))
-    student = Student(name=name, roll=roll)
-    db.session.add(student); db.session.commit()
-    selected = random.sample(questions, 40)
-    random.shuffle(selected)
-    session["student_id"] = student.id
     session["questions"] = [q.id for q in selected]
     session["answers"] = {}
     return redirect(url_for("test"))

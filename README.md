@@ -13,7 +13,6 @@ A Flask + PostgreSQL/Supabase + Render-ready online mock-test platform for TRE-4
 - Instant result, explanations, history and leaderboard
 
 ## Other features
-- Random 40-question test from the admin question bank
 - Subject-wise question bank
 - CSV bulk import for additional 500/1000+ questions
 - Admin result export CSV
